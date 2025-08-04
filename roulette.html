@@ -1,50 +1,57 @@
+<!-- roulette.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>경품 추첨</title>
-  <style>
-    body { font-family: sans-serif; text-align: center; }
-    #prize { font-size: 2em; margin-top: 20px; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>룰렛 이벤트</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-  <h1>🎁 경품 추첨</h1>
-  <button onclick="drawPrize()">추첨하기</button>
-  <div id="prize">여기에 결과가 나옵니다</div>
+  <div class="container">
+    <h1>룰렛 이벤트</h1>
+    <button onclick="spinRoulette()">룰렛 돌리기</button>
+    <p id="result"></p>
+  </div>
 
   <script>
-    let prizes = [];
-    
-    const apiUrl = "https://script.google.com/macros/s/AKfycbweeP0WZu0rvfiaakBZX8XpkLVpIh9C3aJWOEl4hma_0I_A4DsCxRqQ_KZYZ6aNnah-PA/exec";
+    const userId = localStorage.getItem("userId");
+    if (!userId) location.href = "index.html";
 
-    // 경품 데이터 불러오기
-    fetch(apiUrl)
-      .then(res => res.json())
-      .then(data => {
-        prizes = [];
+    if (localStorage.getItem("roulette_" + userId)) {
+      document.getElementById("result").innerText = "이미 참여하셨습니다.";
+    }
 
-        data.forEach(item => {
-          for (let i = 0; i < item['수량']; i++) {
-            prizes.push(item['경품명']);
-          }
-        });
+    function spinRoulette() {
+      if (localStorage.getItem("roulette_" + userId)) return;
 
-        console.log("불러온 경품 목록:", prizes);
+      fetch("https://script.google.com/macros/s/AKfycbyZuE7QSVhSSfHGxrw4ScBEKbvi-5YnOiqIhrG3KOyq_bvMcD02TKuNn_AVTC5b4-Z4lg/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          team: localStorage.getItem("team"),
+          name: localStorage.getItem("name"),
+          userId: userId
+        })
       })
-      .catch(err => console.error("에러 발생:", err));
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem("roulette_" + userId, `${userId},${data.prize},${new Date().toISOString()}`);
+          document.getElementById("result").innerText = `${data.prize} 당첨! 축하합니다.`;
+        } else {
+          document.getElementById("result").innerText = data.message || "에러가 발생했습니다.";
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        document.getElementById("result").innerText = "서버 통신 중 오류 발생";
+      });
+    }
 
-    function drawPrize() {
-      if (prizes.length === 0) {
-        document.getElementById("prize").textContent = "경품이 모두 소진되었습니다!";
-        return;
-      }
-
-      const index = Math.floor(Math.random() * prizes.length);
-      const selected = prizes.splice(index, 1)[0]; // 중복 방지
-
-      document.getElementById("prize").textContent = `🎉 ${selected} 당첨!`;
+    function resetEvent() {
+      localStorage.removeItem("roulette_" + userId);
+      document.getElementById("result").innerText = "초기화되었습니다. 다시 참여 가능합니다.";
     }
   </script>
 </body>

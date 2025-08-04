@@ -4,40 +4,62 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>미션 스템프</title>
-        <link rel="stylesheet" href="styles.css">
-        <style>
-            .stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
-            .stamp { border: 1px solid #ccc; padding: 20px; text-align: center; }
-            .stamped { background-color: lightgreen; }
-        </style>
+        <link rel="stylesheet" href="./style.css">
     </head>
 
     <body>
-        <div class="container">
+        <div class="container stamp-container">
             <h1>미션 스템프</h1>
             <div class="stamp-grid" id="grid"></div>
             <p id="message"></p>
+            <button id="backBtn" onclick="location.href = 'main.html'">뒤로가기</button>
+            <!-- <button onclick="resetStamp()">스템프 초기화</button> -->
         </div>
 
         <script>
             const userId = localStorage.getItem("userId");
             if (!userId) location.href = "index.html";
+
             const urlParams = new URLSearchParams(location.search);
             const booth = urlParams.get("booth");
             const key = `stamp_${userId}`;
             let stamps = JSON.parse(localStorage.getItem(key) || "[]");
+
             if (booth && !stamps.includes(booth)) {
-            stamps.push(booth);
-            localStorage.setItem(key, JSON.stringify(stamps));
+                stamps.push(booth);
+                localStorage.setItem(key, JSON.stringify(stamps));
             }
+
             const grid = document.getElementById("grid");
+
             for (let i = 1; i <= 8; i++) {
-            const div = document.createElement("div");
-            div.innerText = `${i}번 부스`;
-            div.className = "stamp" + (stamps.includes(i.toString()) ? " stamped" : "");
-            grid.appendChild(div);
+                const div = document.createElement("div");
+                div.className = "stamp" + (stamps.includes(i.toString()) ? " stamped" : "");
+                div.innerText = (stamps.includes(i.toString()) ? " 완료" : `${i}번`);
+                grid.appendChild(div);
             }
-            if (stamps.length === 8) document.getElementById("message").innerText = "미션 완료! 축하합니다.";
+
+            if (stamps.length === 8) {
+                const formData = new FormData();
+                formData.append("entry.963390347", localStorage.getItem('team'));
+                formData.append("entry.861799", localStorage.getItem('name'));
+                formData.append("entry.1687641714", 'yes');
+
+                fetch("https://docs.google.com/forms/u/0/d/e/1FAIpQLScUfD2vA65v5Z93QDsuvzK00rgSKZXf-G9_bb5Wk9l56QD46g/formResponse", {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: formData
+                });
+
+                document.getElementById("message").innerText = "미션 완료! 축하합니다.";
+                document.querySelector('#grid').style.display = 'none';
+                document.querySelector('#backBtn').style.display = 'block';
+            }
+
+            function resetStamp() {
+                localStorage.removeItem(key);
+                location.reload(); // 새로고침으로 UI 초기화
+                }
         </script>
     </body>
 </html>
