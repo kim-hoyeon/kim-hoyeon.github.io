@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>이벤트 메인</title>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+
+    <body>
+        <div class="container main">
+            <h1>DX 우수사례 공유회</h1>
+            <div class="menu">
+                <button onclick="location.href='review.html'">감상평 쓰기</button>
+                <button onclick="location.href='roulette.html'">룰렛 이벤트</button>
+                <button onclick="location.href='stamp.html'">미션 스템프</button>
+            </div>
+            <button onclick="resetData()" class="danger">감상평 & 룰렛 초기화</button>
+        </div>
+        <script>
+            if (!localStorage.getItem("userId")) {
+            alert("로그인이 필요합니다");
+            location.href = "index.html";
+            }
+
+            function resetData() {
+            const userId = localStorage.getItem("userId");
+            if (!userId) return;
+            localStorage.removeItem("review_" + userId);
+            localStorage.removeItem("roulette_" + userId);
+            alert("감상평과 룰렛 데이터가 초기화되었습니다.");
+            }
+        </script>
+    </body>
+</html>

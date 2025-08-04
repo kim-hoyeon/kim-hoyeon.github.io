@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>감상평 쓰기</title>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+
+    <body>
+        <div class="container review">
+            <h1>감상평 작성</h1>
+            <span>DX 우수사레 공유회에 대한<br/>감상평을 작성해 주세요.</span>
+            <p id="message"></p>
+            <textarea id="review" maxlength="1000" placeholder="감상평을 입력해주세요"></textarea>
+            <button id="reviewBtn" onclick="submitReview()">제출</button>
+            <button id="backBtn" onclick="location.href = 'main.html'">뒤로가기</button>
+        </div>
+
+        <script>
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                alert("로그인이 필요합니다");
+                location.href = "index.html";
+            } else if (localStorage.getItem("review_" + userId)) {
+                document.getElementById("message").innerText = "감상평을 이미 작성하셨습니다.";
+                document.querySelector("textarea").style.display = 'none';
+                document.querySelector("#reviewBtn").style.display = 'none';
+                document.querySelector("#backBtn").style.display = 'block';
+            }
+
+            function submitReview() {
+                const text = document.getElementById("review").value.trim();
+                if (!text) return alert("감상평을 입력해주세요");
+                const record = `${userId},"${text.replace(/\n/g, ' ')}",${new Date().toISOString()}`;
+
+                const formData = new FormData();
+                formData.append("entry.750774274", localStorage.getItem('team'));
+                formData.append("entry.1341314251", localStorage.getItem('name'));
+                formData.append("entry.405210027", text);
+
+                fetch("https://docs.google.com/forms/u/0/d/e/1FAIpQLSc23tP4OaA3c7lXQ0Oqx1Dp_atw5IdEzEqUNsz-dDsLnITtNQ/formResponse", {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: formData
+                });
+
+                localStorage.setItem("review_" + userId, record);
+                document.querySelector("textarea").disabled = true;
+                alert('감상평이 제출되었습니다.');
+                location.href = "main.html";
+            }
+        </script>
+    </body>
+</html>

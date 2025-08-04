@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이벤트 로그인</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+
+  <body>
+    <div class="container index">
+      <h1>DX 우수사례 공유회에<br/>오신 것을 환영합니다!</h1>
+
+      <div class="inputs">
+        <input type="text" id="team" placeholder="소속">
+        <input type="text" id="name" placeholder="이름">
+      </div>
+
+      <button class="loginBtn" onclick="login()">로그인</button>
+    </div>
+    
+    <script>index
+      function login() {
+        const team = document.getElementById('team').value.trim();
+        const name = document.getElementById('name').value.trim();
+        if (!team || !name) return alert("소속과 이름을 입력해주세요");
+        const userId = `${team}_${name}`;
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("team", team);
+        localStorage.setItem("name", name);
+        window.location.href = "main.html";
+      }
+    </script>
+  </body>
+</html> 
