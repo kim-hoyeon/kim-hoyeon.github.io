@@ -1,174 +1,51 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>룰렛 이벤트</title>
+  <meta charset="UTF-8">
+  <title>경품 추첨</title>
   <style>
-    body {
-      font-family: 'Pretendard', sans-serif;
-      text-align: center;
-      background: #f0f0f0;
-      margin: 0;
-      padding: 40px;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      margin-bottom: 30px;
-    }
-    .roulette-wrapper {
-      position: relative;
-      width: 300px;
-      height: 300px;
-      margin: 0 auto 20px;
-    }
-    .wheel {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      border: 10px solid #ccc;
-      background: conic-gradient(
-        #FFADAD 0deg 60deg,
-        #FFD6A5 60deg 120deg,
-        #FDFFB6 120deg 180deg,
-        #CAFFBF 180deg 240deg,
-        #9BF6FF 240deg 300deg,
-        #A0C4FF 300deg 360deg
-      );
-      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
-    }
-    .pointer {
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 20px solid red;
-    }
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-    }
-    button:disabled {
-      background-color: #999;
-      cursor: not-allowed;
-    }
-    #result {
-      margin-top: 20px;
-      font-size: 18px;
-      font-weight: bold;
-      min-height: 24px;
-    }
+    body { font-family: sans-serif; text-align: center; }
+    #prize { font-size: 2em; margin-top: 20px; }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>룰렛 이벤트</h1>
-    <div class="roulette-wrapper">
-      <div class="pointer"></div>
-      <div class="wheel" id="wheel"></div>
-    </div>
-    <button id="spinBtn">룰렛 돌리기</button>
-    <p id="result"></p>
-  </div>
+
+  <h1>🎁 경품 추첨</h1>
+  <button onclick="drawPrize()">추첨하기</button>
+  <div id="prize">여기에 결과가 나옵니다</div>
 
   <script>
-    (function(){
-      const userId = localStorage.getItem("userId");
-      const userName = localStorage.getItem("name");
-      const userTeam = localStorage.getItem("team");
-      const spinBtn = document.getElementById("spinBtn");
-      const resultEl = document.getElementById("result");
-      const wheel = document.getElementById("wheel");
+    let prizes = [];
+    
+    const apiUrl = "https://script.google.com/macros/s/AKfycbweeP0WZu0rvfiaakBZX8XpkLVpIh9C3aJWOEl4hma_0I_A4DsCxRqQ_KZYZ6aNnah-PA/exec";
 
-      // 로그인 체크
-      if (!userId) {
-        alert("로그인이 필요합니다");
-        location.href = "index.html";
+    // 경품 데이터 불러오기
+    fetch(apiUrl)
+      .then(res => res.json())
+      .then(data => {
+        prizes = [];
+
+        data.forEach(item => {
+          for (let i = 0; i < item['수량']; i++) {
+            prizes.push(item['경품명']);
+          }
+        });
+
+        console.log("불러온 경품 목록:", prizes);
+      })
+      .catch(err => console.error("에러 발생:", err));
+
+    function drawPrize() {
+      if (prizes.length === 0) {
+        document.getElementById("prize").textContent = "경품이 모두 소진되었습니다!";
         return;
       }
 
-      // 이미 참여했는지 확인
-      if (localStorage.getItem("roulette_" + userId)) {
-        resultEl.textContent = "이미 참여하셨습니다.";
-        spinBtn.disabled = true;
-      }
+      const index = Math.floor(Math.random() * prizes.length);
+      const selected = prizes.splice(index, 1)[0]; // 중복 방지
 
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwB1zmGi53EX-PhWIfcObxVsS-8wCYjYAAC9BSeQhGleTRWQYDzhZTDkIuKVWDFI_NBKQ/exec";
-
-      spinBtn.addEventListener("click", function() {
-        if (localStorage.getItem("roulette_" + userId)) return;
-
-        spinBtn.disabled = true;
-        resultEl.textContent = "추첨 중입니다...";
-
-        fetch(GAS_WEBAPP_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: userId,
-            name: userName,
-            team: userTeam
-          })
-        })
-        .then(response => {
-          if (!response.ok) throw new Error('네트워크 오류');
-          return response.json();
-        })
-        .then(data => {
-          if (data.result === "success") {
-            const sectorCount = 6;
-            const sectorAngle = 360 / sectorCount;
-            
-            // 당첨된 상품을 index로 매핑하기 위한 간단한 방법
-            // 경품 배열과 실제 각도 매핑은 상황에 맞게 조정 필요
-            // 여기선 랜덤으로 돌리는 애니메이션을 위해 임의로 설정
-            const prizeList = ["#FFADAD", "#FFD6A5", "#FDFFB6", "#CAFFBF", "#9BF6FF", "#A0C4FF"];
-            let prizeIndex = prizeList.findIndex(color => color === data.prizeColor) // 없으면 -1
-            
-            // 만약 prizeColor가 없다면 랜덤으로 fallback
-            if (prizeIndex < 0) prizeIndex = Math.floor(Math.random() * sectorCount);
-
-            // 실제 각도 계산 (5바퀴 + 당첨 위치)
-            const finalAngle = 360 * 5 + (360 - prizeIndex * sectorAngle - sectorAngle / 2);
-            
-            wheel.style.transition = "transform 4s cubic-bezier(0.33, 1, 0.68, 1)";
-            wheel.style.transform = `rotate(${finalAngle}deg)`;
-
-            setTimeout(() => {
-              localStorage.setItem(
-                "roulette_" + userId,
-                `${userId},${data.prize},${new Date().toISOString()}`
-              );
-              resultEl.textContent = `${data.prize} 당첨! 축하합니다 🎉`;
-            }, 4200);
-          } else {
-            resultEl.textContent = data.message || "경품이 모두 소진되었습니다.";
-            spinBtn.disabled = false;
-          }
-        })
-        .catch(() => {
-          resultEl.textContent = "서버와 통신 중 오류가 발생했습니다.";
-          spinBtn.disabled = false;
-        });
-      });
-    })();
+      document.getElementById("prize").textContent = `🎉 ${selected} 당첨!`;
+    }
   </script>
 </body>
 </html>

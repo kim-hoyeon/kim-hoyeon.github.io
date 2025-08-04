@@ -63,7 +63,15 @@ button {
 
 .main .menu {
     display: flex;
+    gap: 6px;
     width: 100%;
+    margin-bottom: 12px;
+}
+.main .menu button {
+    width: calc(100% / 3);
+    min-height: 100px;
+    display: block;
+    background-color: #2e48b7;
 }
 
 .review h1 { margin-bottom: 30px; }
