@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>포춘쿠키 이벤트</title>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    .cookie {
+      width: 150px;
+      height: 150px;
+      background: url('https://cdn-icons-png.flaticon.com/512/1471/1471406.png') no-repeat center/contain;
+      margin: 30px auto;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .crack {
+      animation: crack 0.6s forwards;
+    }
+
+    @keyframes crack {
+      0%   { transform: scale(1) rotate(0deg); }
+      30%  { transform: scale(1.2) rotate(10deg); }
+      60%  { transform: scale(0.9) rotate(-10deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #333;
+      opacity: 0;
+      transition: opacity 0.8s;
+    }
+
+    .message.show {
+      opacity: 1;
+    }
+
+    button[disabled] {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+  <body>
+    <div class="container cookies">
+      <h1>오늘의 포춘쿠키</h1>
+      <p id="message"></p>
+      <div class="cookie" id="cookie"></div>
+      <div class="message" id="messageBox"></div>
+      <button id="reviewBtn" onclick="submitCookies()">응모하기</button>
+      <button id="backBtn" onclick="location.href = 'main.html'">뒤로가기</button>
+    </div>
+        
+    <script>
+      const cookie = document.getElementById("cookie");
+      const messageBox = document.getElementById("messageBox");
+      const button = document.getElementById("reviewBtn");
+
+      const fortunes = [
+        "행운이 곧 당신을 찾아올 거예요!",
+        "오늘은 새로운 기회가 열리는 날입니다.",
+        "웃는 얼굴에 복이 와요 😊",
+        "도전은 곧 성장의 시작입니다.",
+        "곧 좋은 소식이 찾아올 거예요.",
+        "당신의 끈기는 놀라운 결과를 가져올 거예요.",
+        "예상치 못한 기쁨이 기다리고 있어요!",
+        "오늘 하루도 스스로를 칭찬해 주세요."
+      ];
+      
+      window.onload = () => {
+        const hasSubmitted = localStorage.getItem('hasSubmitted') === 'true';
+        const savedFortune = localStorage.getItem('fortuneMessage');
+
+        if (hasSubmitted) {
+          button.disabled = true;
+          button.textContent = "이미 응모하셨습니다";
+          document.querySelector('#backBtn').style.display = 'block';
+
+          if (savedFortune) {
+            messageBox.textContent = savedFortune;
+            messageBox.classList.add("show");
+          }
+        }
+      };
+
+      function submitCookies () {
+        if (localStorage.getItem('hasSubmitted') === 'true') return;
+
+        cookie.classList.add("crack");
+        messageBox.classList.remove("show");
+        
+        setTimeout(() => {
+          const randomIndex = Math.floor(Math.random() * fortunes.length);
+          const selectedFortune = fortunes[randomIndex];
+          
+          // alert("🥠" + selectedFortune + "🥠");
+          
+          messageBox.textContent = selectedFortune;
+          messageBox.classList.add("show");
+          
+          localStorage.setItem('hasSubmitted', 'true');
+          localStorage.setItem('fortuneMessage', selectedFortune);
+          button.disabled = true;
+          button.textContent = "이미 응모하셨습니다";
+          cookie.classList.remove("crack");
+          document.querySelector('#backBtn').style.display = 'block';
+
+          const formData = new FormData();
+          formData.append("entry.1171344104", localStorage.getItem('team'));
+          formData.append("entry.2110575320", localStorage.getItem('name'));
+          formData.append("entry.1161943199", selectedFortune);
+
+          fetch("https://docs.google.com/forms/u/0/d/e/1FAIpQLSf6Mg-o8qzNXUWIy6iHCxax3oHxRypbPPkO69udn1ezDulv4Q/formResponse", {
+              method: "POST",
+              mode: "no-cors",
+              body: formData
+          });
+        }, 600);
+      }
+    </script>
+  </body>
+</html>

@@ -97,3 +97,6 @@ button {
 .stamped { background-color: #323364; }
 .stamp-container #message { color: #fff; font-size: 20px; }
 .stamp-container #backBtn { margin-top: 60px; display: none; }
+
+.cookies #messageBox { color: #fff; font-size: 16px; margin-bottom: 60px; }
+.cookies #backBtn { display: none; margin-top: 12px; }
