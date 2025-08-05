@@ -100,6 +100,8 @@ button {
     min-height: 130px;
     display: block;
     background-color: #2e48b7;
+    box-shadow: 1px 1px 3px 0px #1f2262;
+    border: 2px solid #23359c;
 }
 
 .review h1 { margin-bottom: 30px; }
