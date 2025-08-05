@@ -16,6 +16,7 @@ body {
 }
 
 .container {
+    position: relative;
     width: 100%;
     height: 100%;
     display: flex;
@@ -24,11 +25,35 @@ body {
     align-items: center;
     background: linear-gradient(180deg, #194183 15%, #6e95d6);
     padding: 0 20px;
+    z-index: 1;
 }
-.container.index { padding: 0 50px; }
 
-.container h1 { color: #fff; text-align: center; font-size: 24px; font-weight: 500; margin-bottom: 60px; width: 100%; }
-.container span { color: #fff; text-align: center; font-size: 18px; font-weight: 400; margin-bottom: 30px; width: 100%; }
+.container::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url(./img/building.png) no-repeat center bottom -50px;
+    background-size: 100% 100%;
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.container::after {
+    content: "";
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: url(./img/circle.png) no-repeat center center;
+    background-size: 100% 100%;
+    width: 130px;
+    height: 130px;
+}
+
+.container.review::before,
+.container.review::after { display: none; }
+
+.container h1 { color: #fff; text-align: center; font-size: 24px; font-weight: 500; margin-bottom: 60px; width: 100%; z-index: 2; }
+.container span { color: #fff; text-align: center; font-size: 18px; font-weight: 400; margin-bottom: 30px; width: 100%; z-index: 2; }
 
 input[type='text'] {
     border: 1px solid #111;
@@ -49,6 +74,7 @@ input[type='text'] {
     gap: 20px;
     margin-bottom: 40px;
     width: 100%;
+    z-index: 2;
 }
 
 button {
@@ -60,6 +86,7 @@ button {
     border: 0;
     background-color: #111;
     color: #fff;
+    z-index: 2;
 }
 
 .main .menu {
@@ -87,16 +114,49 @@ button {
     margin-bottom: 30px;
     outline: none;
     min-height: 200px;
+    z-index: 2;
 }
 .review #review::placeholder { color: rgba(255, 255, 255, 0.5); }
 .review #backBtn { display: none; }
 .review #message { font-size: 20px; color: #fff; margin-bottom: 30px; }
 
-.stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; width: 100%; }
+.stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; width: 100%; z-index: 2; }
 .stamp { border: 1px solid #ccc; text-align: center; width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; background-color: transparent; border-radius: 5px; color: #fff; }
 .stamped { background-color: #323364; }
 .stamp-container #message { color: #fff; font-size: 20px; }
 .stamp-container #backBtn { margin-top: 60px; display: none; }
 
-.cookies #messageBox { color: #fff; font-size: 16px; margin-bottom: 60px; }
+.cookie {
+    width: 150px;
+    height: 150px;
+    background: url('https://cdn-icons-png.flaticon.com/512/1471/1471406.png') no-repeat center/contain;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 2;
+}
+
+.crack { animation: crack 0.6s forwards; }
+
+@keyframes crack {
+    0%   { transform: scale(1) rotate(0deg); }
+    30%  { transform: scale(1.2) rotate(10deg); }
+    60%  { transform: scale(0.9) rotate(-10deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.message {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #333;
+    opacity: 0;
+    transition: opacity 0.8s;
+    z-index: 2;
+}
+.message.show { opacity: 1; }
+
+button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+.cookies #messageBox { color: #fff; font-size: 16px; margin-bottom: 30px; }
 .cookies #backBtn { display: none; margin-top: 12px; }

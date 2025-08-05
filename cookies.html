@@ -5,44 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>포춘쿠키 이벤트</title>
   <link rel="stylesheet" href="./style.css">
-  <style>
-    .cookie {
-      width: 150px;
-      height: 150px;
-      background: url('https://cdn-icons-png.flaticon.com/512/1471/1471406.png') no-repeat center/contain;
-      margin: 30px auto;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .crack {
-      animation: crack 0.6s forwards;
-    }
-
-    @keyframes crack {
-      0%   { transform: scale(1) rotate(0deg); }
-      30%  { transform: scale(1.2) rotate(10deg); }
-      60%  { transform: scale(0.9) rotate(-10deg); }
-      100% { transform: scale(1) rotate(0deg); }
-    }
-
-    .message {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      color: #333;
-      opacity: 0;
-      transition: opacity 0.8s;
-    }
-
-    .message.show {
-      opacity: 1;
-    }
-
-    button[disabled] {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-  </style>
 </head>
   <body>
     <div class="container cookies">
