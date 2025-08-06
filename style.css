@@ -185,4 +185,4 @@ button[disabled] {
 .backBtn { position: absolute; top: 12px; left: 12px; width: 50px; height: 50px; background: none; box-shadow: 1px 1px 3px 3px rgba(0, 0, 0, 0.2); border-radius: 15px; }
 .backBtn img { width: 100%; height: 100%; }
 
-.main .menu button span { display: block; font-size: 11px; font-weight: 400; margin: 0; margin-top: 12px;}
+.main .menu button span { display: block; font-size: 9px; font-weight: 400; margin: 0; margin-top: 12px; font-style: italic; }
