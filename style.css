@@ -135,6 +135,7 @@ button {
 
 .stamp-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; width: 100%; z-index: 2; }
 .stamp { border: 1px solid #ccc; text-align: center; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background-color: rgba(255, 255, 255, 0.2); border-radius: 5px; color: #fff; }
+.stamp span { font-size: 14px; font-style: italic; }
 .stamped:nth-child(1) { background-image: url('./img/stamp01.jpeg'); background-size: 100% 100%; }
 .stamped:nth-child(2) { background-image: url('./img/stamp02.jpeg'); background-size: 100% 100%; }
 .stamped:nth-child(3) { background-image: url('./img/stamp03.jpeg'); background-size: 100% 100%; }
