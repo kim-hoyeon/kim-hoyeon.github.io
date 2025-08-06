@@ -3,17 +3,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>미션 스템프</title>
+        <title>미션 스탬프</title>
         <link rel="stylesheet" href="./style.css">
     </head>
 
-    <body>
+    <body style="height: auto;">
         <div class="container stamp-container">
-            <h1>미션 스템프</h1>
+            <button class="backBtn" onclick="location.href='./main.html'"><img src="./img/home.png" alt="홈버튼"></button>
+            <h1>미션 스탬프</h1>
             <div class="stamp-grid" id="grid"></div>
             <p id="message"></p>
-            <button id="backBtn" onclick="location.href = 'main.html'">뒤로가기</button>
-            <!-- <button onclick="resetStamp()">스템프 초기화</button> -->
         </div>
 
         <script>
@@ -35,7 +34,7 @@
             for (let i = 1; i <= 8; i++) {
                 const div = document.createElement("div");
                 div.className = "stamp" + (stamps.includes(i.toString()) ? " stamped" : "");
-                div.innerText = (stamps.includes(i.toString()) ? " 완료" : `${i}번`);
+                div.innerText = (stamps.includes(i.toString()) ? "" : `스탬프를 찾아주세요`);
                 grid.appendChild(div);
             }
 
@@ -53,7 +52,6 @@
 
                 document.getElementById("message").innerText = "미션 완료! 축하합니다.";
                 document.querySelector('#grid').style.display = 'none';
-                document.querySelector('#backBtn').style.display = 'block';
             }
 
             function resetStamp() {

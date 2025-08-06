@@ -36,6 +36,12 @@ body {
     z-index: 1;
 }
 
+.container.stamp-container {
+    justify-content: start;
+    padding: 100px 20px;
+    height: auto;
+}
+
 .container::before {
     content: "";
     position: absolute;
@@ -57,7 +63,7 @@ body {
     height: 130px;
 }
 
-.container h1 { color: #fff; text-align: center; font-size: 24px; font-weight: 500; margin-bottom: 60px; width: 100%; z-index: 2; }
+.container h1 { color: #fff; text-align: center; font-size: 30px; font-weight: 500; margin-bottom: 60px; width: 100%; z-index: 2; font-weight: 600; }
 .container span { color: #fff; text-align: center; font-size: 18px; font-weight: 400; margin-bottom: 30px; width: 100%; z-index: 2; }
 
 input[type='text'] {
@@ -86,7 +92,7 @@ button {
     outline: none;
     width: 100%;
     height: 50px;
-    font-size: 14px;
+    font-size: 18px;
     border-radius: 5px;
     border: 0;
     background-color: #111;
@@ -127,9 +133,16 @@ button {
 .review #backBtn { display: none; }
 .review #message { font-size: 20px; color: #fff; margin-bottom: 30px; }
 
-.stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; width: 100%; z-index: 2; }
-.stamp { border: 1px solid #ccc; text-align: center; width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; background-color: transparent; border-radius: 5px; color: #fff; }
-.stamped { background-color: #323364; }
+.stamp-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; width: 100%; z-index: 2; }
+.stamp { border: 1px solid #ccc; text-align: center; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; background-color: rgba(255, 255, 255, 0.2); border-radius: 5px; color: #fff; }
+.stamped:nth-child(1) { background-image: url('./img/stamp01.jpeg'); background-size: 100% 100%; }
+.stamped:nth-child(2) { background-image: url('./img/stamp02.jpeg'); background-size: 100% 100%; }
+.stamped:nth-child(3) { background-image: url('./img/stamp03.jpeg'); background-size: 100% 100%; }
+.stamped:nth-child(4) { background-image: url('./img/stamp04.jpeg'); background-size: 100% 100%; }
+.stamped:nth-child(5) { background-image: url('./img/stamp05.jpeg'); background-size: 100% 100%; }
+.stamped:nth-child(6) { background-image: url('./img/stamp06.jpeg'); background-size: 100% 100%; }
+.stamped:nth-child(7) { background-image: url('./img/stamp07.jpeg'); background-size: 100% 100%; }
+.stamped:nth-child(8) { background-image: url('./img/stamp08.jpeg'); background-size: 100% 100%; }
 .stamp-container #message { color: #fff; font-size: 20px; }
 .stamp-container #backBtn { margin-top: 60px; display: none; }
 
@@ -165,5 +178,8 @@ button[disabled] {
     background-color: #ccc;
     cursor: not-allowed;
 }
-.cookies #messageBox { color: #fff; font-size: 16px; margin-bottom: 30px; }
+.cookies #messageBox { color: #fff; font-size: 18px; margin-bottom: 30px; }
 .cookies #backBtn { display: none; margin-top: 12px; }
+
+.backBtn { position: absolute; top: 12px; left: 12px; width: 50px; height: 50px; background: none; box-shadow: 1px 1px 3px 3px rgba(0, 0, 0, 0.2); border-radius: 15px; }
+.backBtn img { width: 100%; height: 100%; }

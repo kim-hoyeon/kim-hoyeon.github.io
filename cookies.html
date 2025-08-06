@@ -8,12 +8,12 @@
 </head>
   <body>
     <div class="container cookies">
+      <button class="backBtn" onclick="location.href='./main.html'"><img src="./img/home.png" alt="홈버튼"></button>
       <h1>오늘의 포춘쿠키</h1>
       <p id="message"></p>
       <div class="cookie" id="cookie"></div>
       <div class="message" id="messageBox"></div>
       <button id="reviewBtn" onclick="submitCookies()">응모하기</button>
-      <button id="backBtn" onclick="location.href = 'main.html'">뒤로가기</button>
     </div>
         
     <script>
@@ -49,8 +49,7 @@
 
         if (hasSubmitted) {
           button.disabled = true;
-          button.textContent = "이미 응모하셨습니다";
-          document.querySelector('#backBtn').style.display = 'block';
+          button.textContent = "응모되셨습니다 (당첨 여부 명일 안내)";
 
           if (savedFortune) {
             messageBox.textContent = savedFortune;
@@ -77,9 +76,8 @@
           localStorage.setItem('hasSubmitted', 'true');
           localStorage.setItem('fortuneMessage', selectedFortune);
           button.disabled = true;
-          button.textContent = "이미 응모하셨습니다";
+          button.textContent = "응모되셨습니다 (당첨 여부 명일 안내)";
           cookie.classList.remove("crack");
-          document.querySelector('#backBtn').style.display = 'block';
 
           const formData = new FormData();
           formData.append("entry.1171344104", localStorage.getItem('team'));

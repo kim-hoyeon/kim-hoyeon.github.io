@@ -9,12 +9,12 @@
 
     <body>
         <div class="container review">
+            <button class="backBtn" onclick="location.href='./main.html'"><img src="./img/home.png" alt="홈버튼"></button>
             <h1>감상평 작성</h1>
             <span>DX 우수사레 공유회에 대한<br/>감상평을 작성해 주세요.</span>
             <p id="message"></p>
             <textarea id="review" maxlength="1000" placeholder="감상평을 입력해주세요"></textarea>
             <button id="reviewBtn" onclick="submitReview()">제출</button>
-            <button id="backBtn" onclick="location.href = 'main.html'">뒤로가기</button>
         </div>
 
         <script>
@@ -26,7 +26,6 @@
                 document.getElementById("message").innerText = "감상평을 이미 작성하셨습니다.";
                 document.querySelector("textarea").style.display = 'none';
                 document.querySelector("#reviewBtn").style.display = 'none';
-                document.querySelector("#backBtn").style.display = 'block';
             }
 
             function submitReview() {
